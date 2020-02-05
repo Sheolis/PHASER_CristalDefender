@@ -33,7 +33,7 @@ function preload(){
 	this.load.image('background1','assets/background_color.png');
 	this.load.image('background2','assets/background.png');
 	this.load.image('background3','assets/walls_background.png');
-	this.load.image('etoile','assets/diamond.png');
+	this.load.spritesheet('etoile','assets/diamond.png',{frameWidth: 18, frameHeight: 14});
 	this.load.image('sol','assets/bloc_bot.png');
 	this.load.image('top','assets/bloc_top.png');
 	this.load.image('bloc1','assets/bloc_large.png');
@@ -54,7 +54,7 @@ function create(){
 	this.add.image(400,300,'background3');
 
 	platforms = this.physics.add.staticGroup();
-	platforms.create(400,568,'sol');
+	platforms.create(400,586,'sol');
 	platforms.create(600,400,'bloc1');
 	platforms.create(50,250,'bloc1');
 
@@ -97,6 +97,13 @@ function create(){
 		setXY: {x:12,y:0,stepX:70}
 	});
 
+	/*this.anims.create({
+		key:'shine',
+		frames: this.anims.generateFrameNumbers('etoile', {start: 0, end: 2}),
+		frameRate: 10,
+		repeat: 1
+	});*/
+
 	this.physics.add.collider(stars,platforms);
 	this.physics.add.overlap(player,stars,collectStar,null,this);
 
@@ -109,7 +116,7 @@ function create(){
 
 
 function update(){
-
+	//stars.anims.play('shine', true);
 	if(cursors.left.isDown && player.body.touching.down){
 		player.anims.play('right', true);
 		player.setVelocityX(-300);
