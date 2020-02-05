@@ -86,9 +86,15 @@ function create(){
 
 	this.anims.create({
 		key:'jump',
-		frames: this.anims.generateFrameNumbers('perso', {start: 4, end: 5}),
+		frames: this.anims.generateFrameNumbers('perso', {start: 4, end: 4}),
 		frameRate: 1,
-		repeat: 1
+		repeat: -1
+	});
+	this.anims.create({
+		key:'down',
+		frames: this.anims.generateFrameNumbers('perso', {start: 5, end: 5}),
+		frameRate: 1,
+		repeat: -1
 	});
 
 	stars = this.physics.add.group({
@@ -96,18 +102,17 @@ function create(){
 		repeat:11,
 		setXY: {x:12,y:0,stepX:70}
 	});
-
 	/*this.anims.create({
 		key:'shine',
 		frames: this.anims.generateFrameNumbers('etoile', {start: 0, end: 2}),
 		frameRate: 10,
 		repeat: 1
 	});*/
-
 	this.physics.add.collider(stars,platforms);
 	this.physics.add.overlap(player,stars,collectStar,null,this);
 
 	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#FFF'});
+
 	bombs = this.physics.add.group();
 	this.physics.add.collider(bombs,platforms);
 	this.physics.add.collider(player,bombs, hitBomb, null, this);
@@ -130,17 +135,22 @@ function update(){
 		player.setVelocityX(0);
 	}
 
-	if(cursors.left.isDown){
+	if(cursors.left.isDown && !player.body.touching.down){
 		player.setVelocityX(-300);
 		player.setFlipX(true);
-	}else if(cursors.right.isDown){
+	}else if(cursors.right.isDown && !player.body.touching.down){
 		player.setVelocityX(300);
 		player.setFlipX(false);
 	}
 
 	if(cursors.up.isDown && player.body.touching.down){
-		player.anims.play('jump', true);
 		player.setVelocityY(-960);
+	}
+	if(player.body.velocity.y<=0 && !player.body.touching.down){
+		player.anims.play('jump', true);
+	}
+	else if(player.body.velocity.y>0 && !player.body.touching.down){
+		player.anims.play('down', true);
 	}
 
 }
