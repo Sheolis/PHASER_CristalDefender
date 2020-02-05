@@ -50,11 +50,11 @@ function preload(){
 
 function create(){
 	this.add.image(400,300,'background1');
-	this.add.image(400,300,'background2');
+	this.add.image(400,500,'background2');
 	this.add.image(400,300,'background3');
 
 	platforms = this.physics.add.staticGroup();
-	platforms.create(400,586,'sol');
+	platforms.create(400,588,'sol');
 	platforms.create(600,400,'bloc1');
 	platforms.create(50,250,'bloc1');
 
@@ -65,8 +65,8 @@ function create(){
 
 	player = this.physics.add.sprite(70,80,'perso').setSize(30,67).setOffset(20,5);
 	player.setCollideWorldBounds(true);
-	player.setBounce(0.2);
-	player.body.setGravityY(000);
+	player.setBounce(0.05);
+	player.body.setGravityY(1300);
 	this.physics.add.collider(player,platforms);
 
 	cursors = this.input.keyboard.createCursorKeys();
@@ -107,7 +107,7 @@ function create(){
 	this.physics.add.collider(stars,platforms);
 	this.physics.add.overlap(player,stars,collectStar,null,this);
 
-	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#000'});
+	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#FFF'});
 	bombs = this.physics.add.group();
 	this.physics.add.collider(bombs,platforms);
 	this.physics.add.collider(player,bombs, hitBomb, null, this);
@@ -140,7 +140,7 @@ function update(){
 
 	if(cursors.up.isDown && player.body.touching.down){
 		player.anims.play('jump', true);
-		player.setVelocityY(-330);
+		player.setVelocityY(-960);
 	}
 
 }
