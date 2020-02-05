@@ -6,7 +6,7 @@ physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
-            debug: true
+            debug: false
         }
     },
 scene: {
@@ -19,6 +19,8 @@ scene: {
 
 var game = new Phaser.Game(config);
 var score = 0;
+var dispo_jj = 0;
+var released = 0;
 
 function init(){
  	var platforms;
@@ -56,17 +58,17 @@ function create(){
 	platforms = this.physics.add.staticGroup();
 	platforms.create(400,588,'sol');
 	platforms.create(600,400,'bloc1');
-	platforms.create(50,250,'bloc1');
+	platforms.create(100,250,'bloc1');
 
 	this.add.image(400,568,'sursol');
 	this.add.image(600,400,'surbloc1');
-	this.add.image(50,250,'surbloc1');
+	this.add.image(100,250,'surbloc1');
 
 
 	player = this.physics.add.sprite(70,80,'perso').setSize(30,67).setOffset(20,5);
 	player.setCollideWorldBounds(true);
 	player.setBounce(0.05);
-	player.body.setGravityY(1300);
+	player.body.setGravityY(2300);
 	this.physics.add.collider(player,platforms);
 
 	cursors = this.input.keyboard.createCursorKeys();
@@ -74,7 +76,7 @@ function create(){
 	this.anims.create({
 		key:'right',
 		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 3}),
-		frameRate: 10,
+		frameRate: 5,
 		repeat: -1
 	});
 
@@ -122,6 +124,8 @@ function create(){
 
 function update(){
 	//stars.anims.play('shine', true);
+
+
 	if(cursors.left.isDown && player.body.touching.down){
 		player.anims.play('right', true);
 		player.setVelocityX(-300);
@@ -143,17 +147,30 @@ function update(){
 		player.setFlipX(false);
 	}
 
+
+	if(player.body.touching.down){ dispo_jj=0;}
+
 	if(cursors.up.isDown && player.body.touching.down){
-		player.setVelocityY(-960);
+		player.setVelocityY(-1160);
 	}
+
+	if(cursors.up.isUp && dispo_jj==0 && !player.body.touching.down){ dispo_jj = 1;}
+
+	if(cursors.up.isDown && dispo_jj==1 && !player.body.touching.down){
+		player.setVelocityY(-1160);
+		dispo_jj = 2;
+	}
+
+
 	if(player.body.velocity.y<=0 && !player.body.touching.down){
 		player.anims.play('jump', true);
 	}
 	else if(player.body.velocity.y>0 && !player.body.touching.down){
 		player.anims.play('down', true);
 	}
-
 }
+
+
 function hitBomb(player, bomb){
 	this.physics.pause();
 	player.setTint(0xff0000);
