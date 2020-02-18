@@ -45,7 +45,7 @@ function preload(){
 	this.load.image('surbloc1','assets/herb_bloc_large.png');
 	this.load.image('surbloc2','assets/herb_bloc_small.png');
 	this.load.image('bomb','assets/bomb_off.png');
-	this.load.spritesheet('perso','assets/sofy.png',{frameWidth: 70, frameHeight: 80});
+	this.load.spritesheet('perso','assets/tsofy.png',{frameWidth: 54, frameHeight: 40});
 }
 
 
@@ -65,7 +65,7 @@ function create(){
 	this.add.image(100,250,'surbloc1');
 
 
-	player = this.physics.add.sprite(70,80,'perso').setSize(30,67).setOffset(20,5);
+	player = this.physics.add.sprite(70,80,'perso').setSize(17,40).setOffset(18,0);;
 	player.setCollideWorldBounds(true);
 	player.setBounce(0.05);
 	player.body.setGravityY(2300);
@@ -75,26 +75,27 @@ function create(){
 
 	this.anims.create({
 		key:'right',
-		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 3}),
-		frameRate: 5,
+		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 7}),
+		frameRate: 12,
 		repeat: -1
 	});
 
 	this.anims.create({
 		key:'stop',
-		frames: [{key: 'perso', frame:0}],
-		frameRate: 20
+		frames: this.anims.generateFrameNumbers('perso', {start: 8, end: 13}),
+		frameRate: 4,
+		repeat: -1
 	});
 
 	this.anims.create({
 		key:'jump',
-		frames: this.anims.generateFrameNumbers('perso', {start: 4, end: 4}),
+		frames: this.anims.generateFrameNumbers('perso', {start: 14, end: 14}),
 		frameRate: 1,
 		repeat: -1
 	});
 	this.anims.create({
 		key:'down',
-		frames: this.anims.generateFrameNumbers('perso', {start: 5, end: 5}),
+		frames: this.anims.generateFrameNumbers('perso', {start: 15, end: 15}),
 		frameRate: 1,
 		repeat: -1
 	});
@@ -151,13 +152,13 @@ function update(){
 	if(player.body.touching.down){ dispo_jj=0;}
 
 	if(cursors.up.isDown && player.body.touching.down){
-		player.setVelocityY(-1160);
+		player.setVelocityY(-1000);
 	}
 
 	if(cursors.up.isUp && dispo_jj==0 && !player.body.touching.down){ dispo_jj = 1;}
 
 	if(cursors.up.isDown && dispo_jj==1 && !player.body.touching.down){
-		player.setVelocityY(-1160);
+		player.setVelocityY(-1000);
 		dispo_jj = 2;
 	}
 
