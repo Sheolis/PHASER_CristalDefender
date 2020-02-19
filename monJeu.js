@@ -6,7 +6,7 @@ physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
-            debug: false
+            debug: true
         }
     },
 scene: {
@@ -45,7 +45,8 @@ function preload(){
 	this.load.image('surbloc1','assets/herb_bloc_large.png');
 	this.load.image('surbloc2','assets/herb_bloc_small.png');
 	this.load.image('bomb','assets/bomb_off.png');
-	this.load.spritesheet('perso','assets/tsofy.png',{frameWidth: 54, frameHeight: 40});
+	this.load.spritesheet('perso','assets/sofy92.png',{frameWidth: 112, frameHeight: 95});
+	this.load.spritesheet('cristal','assets/cristal.png',{frameWidth: 73, frameHeight: 168});
 }
 
 
@@ -62,15 +63,23 @@ function create(){
 	platforms.create(402,263,'bloc2');
 	this.add.image(400,568,'sursol').setScale(0.5);
 
+	cristal = this.physics.add.sprite(400,443,'cristal');
+	cristal.body.setGravityY(-300);
 
-
-	player = this.physics.add.sprite(70,80,'perso').setSize(17,40).setOffset(18,0).setScale(1.5);
+	player = this.physics.add.sprite(70,80,'perso').setSize(40,91).setOffset(33,4);//.setScale(1.5);
 	player.setCollideWorldBounds(true);
 	player.setBounce(0.05);
 	player.body.setGravityY(2300);
 	this.physics.add.collider(player,platforms);
 
 	cursors = this.input.keyboard.createCursorKeys();
+
+	this.anims.create({
+		key:'cristal_turn',
+		frames: this.anims.generateFrameNumbers('cristal', {start: 0, end: 3}),
+		frameRate: 8,
+		repeat: -1
+	});
 
 	this.anims.create({
 		key:'right',
@@ -124,7 +133,7 @@ function create(){
 
 function update(){
 	//stars.anims.play('shine', true);
-
+	cristal.anims.play('cristal_turn', true);
 
 	if(cursors.left.isDown && player.body.touching.down){
 		player.anims.play('right', true);
