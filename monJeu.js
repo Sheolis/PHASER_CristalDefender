@@ -57,15 +57,14 @@ function create(){
 
 	platforms = this.physics.add.staticGroup();
 	platforms.create(400,588,'sol');
-	platforms.create(600,400,'bloc1');
-	platforms.create(100,250,'bloc1');
-
-	this.add.image(400,568,'sursol');
-	this.add.image(600,400,'surbloc1');
-	this.add.image(100,250,'surbloc1');
+	platforms.create(60,408,'bloc1');
+	platforms.create(738,408,'bloc1');
+	platforms.create(402,263,'bloc2');
+	this.add.image(400,568,'sursol').setScale(0.5);
 
 
-	player = this.physics.add.sprite(70,80,'perso').setSize(17,40).setOffset(18,0);;
+
+	player = this.physics.add.sprite(70,80,'perso').setSize(17,40).setOffset(18,0).setScale(1.5);
 	player.setCollideWorldBounds(true);
 	player.setBounce(0.05);
 	player.body.setGravityY(2300);
@@ -152,13 +151,13 @@ function update(){
 	if(player.body.touching.down){ dispo_jj=0;}
 
 	if(cursors.up.isDown && player.body.touching.down){
-		player.setVelocityY(-1000);
+		player.setVelocityY(-1100);
 	}
 
 	if(cursors.up.isUp && dispo_jj==0 && !player.body.touching.down){ dispo_jj = 1;}
 
 	if(cursors.up.isDown && dispo_jj==1 && !player.body.touching.down){
-		player.setVelocityY(-1000);
+		player.setVelocityY(-1100);
 		dispo_jj = 2;
 	}
 
