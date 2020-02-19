@@ -6,7 +6,7 @@ physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
-            debug: true
+            debug: false
         }
     },
 scene: {
@@ -66,7 +66,7 @@ function create(){
 	cristal = this.physics.add.sprite(400,443,'cristal');
 	cristal.body.setGravityY(-300);
 
-	player = this.physics.add.sprite(70,80,'perso').setSize(40,91).setOffset(33,4);//.setScale(1.5);
+	player = this.physics.add.sprite(70,80,'perso').setSize(40,86).setOffset(33,8);//.setScale(1.5);
 	player.setCollideWorldBounds(true);
 	player.setBounce(0.05);
 	player.body.setGravityY(2300);
@@ -87,14 +87,12 @@ function create(){
 		frameRate: 12,
 		repeat: -1
 	});
-
 	this.anims.create({
 		key:'stop',
 		frames: this.anims.generateFrameNumbers('perso', {start: 8, end: 13}),
 		frameRate: 4,
 		repeat: -1
 	});
-
 	this.anims.create({
 		key:'jump',
 		frames: this.anims.generateFrameNumbers('perso', {start: 14, end: 14}),
@@ -105,6 +103,12 @@ function create(){
 		key:'down',
 		frames: this.anims.generateFrameNumbers('perso', {start: 15, end: 15}),
 		frameRate: 1,
+		repeat: -1
+	});
+	this.anims.create({
+		key:'slash',
+		frames: this.anims.generateFrameNumbers('perso', {start: 16, end: 19}),
+		frameRate: 10,
 		repeat: -1
 	});
 
@@ -134,7 +138,9 @@ function create(){
 function update(){
 	//stars.anims.play('shine', true);
 	cristal.anims.play('cristal_turn', true);
-
+	if(cursors.shift.isDown){
+  	player.anims.play('slash', true);
+	}
 	if(cursors.left.isDown && player.body.touching.down){
 		player.anims.play('right', true);
 		player.setVelocityX(-300);
@@ -144,7 +150,7 @@ function update(){
 		player.anims.play('right', true);
 		player.setFlipX(false);
 	}else{
-		player.anims.play('stop', true);
+		player.anims.play('slash', true);
 		player.setVelocityX(0);
 	}
 
@@ -157,26 +163,23 @@ function update(){
 	}
 
 
+//double jump
 	if(player.body.touching.down){ dispo_jj=0;}
-
 	if(cursors.up.isDown && player.body.touching.down){
 		player.setVelocityY(-1100);
 	}
-
 	if(cursors.up.isUp && dispo_jj==0 && !player.body.touching.down){ dispo_jj = 1;}
-
 	if(cursors.up.isDown && dispo_jj==1 && !player.body.touching.down){
 		player.setVelocityY(-1100);
 		dispo_jj = 2;
 	}
-
-
 	if(player.body.velocity.y<=0 && !player.body.touching.down){
 		player.anims.play('jump', true);
 	}
 	else if(player.body.velocity.y>0 && !player.body.touching.down){
 		player.anims.play('down', true);
 	}
+//double jump end
 }
 
 
