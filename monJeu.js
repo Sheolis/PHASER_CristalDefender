@@ -45,7 +45,8 @@ function preload(){
 	this.load.image('surbloc1','assets/herb_bloc_large.png');
 	this.load.image('surbloc2','assets/herb_bloc_small.png');
 	this.load.image('bomb','assets/bomb_off.png');
-	this.load.spritesheet('perso','assets/tsofy.png',{frameWidth: 54, frameHeight: 40});
+	this.load.spritesheet('perso','assets/sofy92.png',{frameWidth: 112, frameHeight: 95});
+	this.load.spritesheet('cristal','assets/cristal.png',{frameWidth: 73, frameHeight: 168});
 }
 
 
@@ -62,9 +63,10 @@ function create(){
 	platforms.create(402,263,'bloc2');
 	this.add.image(400,568,'sursol').setScale(0.5);
 
+	cristal = this.physics.add.sprite(400,443,'cristal');
+	cristal.body.setGravityY(-300);
 
-
-	player = this.physics.add.sprite(70,80,'perso').setSize(17,40).setOffset(18,0).setScale(1.5);
+	player = this.physics.add.sprite(70,80,'perso').setSize(40,86).setOffset(33,8);//.setScale(1.5);
 	player.setCollideWorldBounds(true);
 	player.setBounce(0.05);
 	player.body.setGravityY(2300);
@@ -73,19 +75,24 @@ function create(){
 	cursors = this.input.keyboard.createCursorKeys();
 
 	this.anims.create({
+		key:'cristal_turn',
+		frames: this.anims.generateFrameNumbers('cristal', {start: 0, end: 3}),
+		frameRate: 8,
+		repeat: -1
+	});
+
+	this.anims.create({
 		key:'right',
 		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 7}),
 		frameRate: 12,
 		repeat: -1
 	});
-
 	this.anims.create({
 		key:'stop',
 		frames: this.anims.generateFrameNumbers('perso', {start: 8, end: 13}),
 		frameRate: 4,
 		repeat: -1
 	});
-
 	this.anims.create({
 		key:'jump',
 		frames: this.anims.generateFrameNumbers('perso', {start: 14, end: 14}),
@@ -96,6 +103,12 @@ function create(){
 		key:'down',
 		frames: this.anims.generateFrameNumbers('perso', {start: 15, end: 15}),
 		frameRate: 1,
+		repeat: -1
+	});
+	this.anims.create({
+		key:'slash',
+		frames: this.anims.generateFrameNumbers('perso', {start: 16, end: 19}),
+		frameRate: 10,
 		repeat: -1
 	});
 
@@ -124,8 +137,10 @@ function create(){
 
 function update(){
 	//stars.anims.play('shine', true);
-
-
+	cristal.anims.play('cristal_turn', true);
+	if(cursors.shift.isDown){
+  	player.anims.play('slash', true);
+	}
 	if(cursors.left.isDown && player.body.touching.down){
 		player.anims.play('right', true);
 		player.setVelocityX(-300);
@@ -135,7 +150,7 @@ function update(){
 		player.anims.play('right', true);
 		player.setFlipX(false);
 	}else{
-		player.anims.play('stop', true);
+		player.anims.play('slash', true);
 		player.setVelocityX(0);
 	}
 
@@ -148,26 +163,23 @@ function update(){
 	}
 
 
+//double jump
 	if(player.body.touching.down){ dispo_jj=0;}
-
 	if(cursors.up.isDown && player.body.touching.down){
 		player.setVelocityY(-1100);
 	}
-
 	if(cursors.up.isUp && dispo_jj==0 && !player.body.touching.down){ dispo_jj = 1;}
-
 	if(cursors.up.isDown && dispo_jj==1 && !player.body.touching.down){
 		player.setVelocityY(-1100);
 		dispo_jj = 2;
 	}
-
-
 	if(player.body.velocity.y<=0 && !player.body.touching.down){
 		player.anims.play('jump', true);
 	}
 	else if(player.body.velocity.y>0 && !player.body.touching.down){
 		player.anims.play('down', true);
 	}
+//double jump end
 }
 
 
