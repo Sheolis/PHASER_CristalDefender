@@ -6,7 +6,7 @@ physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
-            debug: true
+            debug: false
         }
     },
 scene: {
@@ -22,6 +22,8 @@ var score = 0;
 var dispo_jj = 0;
 var released = 0;
 var pv_cristal = 1000;
+var dps_cristal = 0;
+var spawn_spot=[[10,302],[10,498],[792, 302],[792, 498]];
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  INIT
 function init(){
  	var platforms;
@@ -33,10 +35,13 @@ function init(){
 	var bomb;
 	var spectre;
 	var timer;
+	var timer_dps;
 	var slash_on;
+	var music;
 }
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PRELOAD
 function preload(){
+	this.load.audio('valbit', ['assets/audio/valbit.it', 'assets/audio/valbit.ogg']);
 	this.load.image('background1','assets/background_color.png');
 	this.load.image('background2','assets/background.png');
 	this.load.image('background3','assets/walls_background.png');
@@ -56,11 +61,24 @@ function preload(){
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CREATE
 function create(){
+	//////////////////////////////////////////////////////////////////////////////// keyboard
 	//this.input.keyboard.on('keydown_SPACE',space_down);
-
-	slash_on = false;
-	timer = this.time.addEvent({ delay: 1000, callback: spawn_spectre, loop: true });
 	cursors = this.input.keyboard.createCursorKeys();
+////////////////////////////////////////////////////////////////////////////////  music
+	this.music = this.sound.add('valbit');
+	var musicConfig = {
+		mute: false,
+		volume: 0.1,
+		rate: 1,
+		detune: 0,
+		seek: 0,
+		loop: true,
+		delay: 0
+	}
+	this.music.play(musicConfig);
+	//////////////////////////////////////////////////////////////////////////////// timers
+	timer_dps = this.time.addEvent({ delay: 918, callback: damageCristal, loop: true });
+	timer = this.time.addEvent({ delay: 1000, callback: spawn_spectre, loop: true });
 //////////////////////////////////////////////////////////////////////////////// décors
 	this.add.image(400,300,'background1');
 	this.add.image(400,500,'background2');
@@ -73,6 +91,7 @@ function create(){
 	platforms.create(402,263,'bloc2');
 	this.add.image(400,568,'sursol').setScale(0.5);
 //////////////////////////////////////////////////////////////////////////////// cristal
+	text_pvcristal = this.add.text(362,320, '1000', {fontSize: '32px', fill:'#FFF'});
 	cristal = this.physics.add.sprite(400,443,'cristal');
 	cristal.body.setGravityY(-300);
 	this.anims.create({
@@ -119,6 +138,25 @@ function create(){
 		frameRate: 10,
 		repeat: -1
 	});
+	slash_on = false;
+///////////////////////////////////////////////////////////////////////////////// étoiles
+	/*stars = this.physics.add.group({
+		key: 'etoile',
+		repeat:11,
+		setXY: {x:12,y:0,stepX:70}
+	});*/
+	//this.physics.add.collider(stars,platforms);
+	//this.physics.add.overlap(player,stars,collectStar,null,this);
+//////////////////////////////////////////////////////////////////////////////// score
+	text_score = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#FFF'});
+//////////////////////////////////////////////////////////////////////////////// bombes
+	//bombs = this.physics.add.group();
+	//this.physics.add.collider(bombs,platforms);
+	//this.physics.add.collider(player,bombs, hitBomb, null, this);
+//////////////////////////////////////////////////////////////////////////////// spectres
+	spectres = this.physics.add.group();
+	this.physics.add.collider(spectres, platforms);
+	this.physics.add.overlap(spectres, cristal, contactCristal);
 	this.anims.create({
 		key:'spectre_walk',
 		frames: this.anims.generateFrameNumbers('spectre', {start: 0, end: 3}),
@@ -131,25 +169,12 @@ function create(){
 		frameRate: 10,
 		repeat: -1
 	});
-///////////////////////////////////////////////////////////////////////////////// étoiles
-	/*stars = this.physics.add.group({
-		key: 'etoile',
-		repeat:11,
-		setXY: {x:12,y:0,stepX:70}
-	});*/
-	//this.physics.add.collider(stars,platforms);
-	//this.physics.add.overlap(player,stars,collectStar,null,this);
-//////////////////////////////////////////////////////////////////////////////// score
-	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#FFF'});
-//////////////////////////////////////////////////////////////////////////////// bombes
-	//bombs = this.physics.add.group();
-	//this.physics.add.collider(bombs,platforms);
-	//this.physics.add.collider(player,bombs, hitBomb, null, this);
-//////////////////////////////////////////////////////////////////////////////// spectres
-	spectres = this.physics.add.group();
-	this.physics.add.collider(spectres, platforms);
-	this.physics.add.overlap(spectres, cristal, damagecristal);
-
+	this.anims.create({
+		key:'spectre_death',
+		frames: this.anims.generateFrameNumbers('spectre', {start: 13, end: 17}),
+		frameRate: 10,
+		repeat: 0
+	});
 }
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CREATE END
 
@@ -204,10 +229,11 @@ else{
 		player.anims.play('down', true);
 	}
 }
-}
+
 //double jump end
 //////////////////////////////////////////////////////////////////////////////// spectre
-
+spectre_near_cristal(spectres);
+}
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UPDATE END
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FONCTIONS
