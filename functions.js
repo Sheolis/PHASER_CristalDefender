@@ -1,4 +1,5 @@
 function damagecristal(spectre, pv_cristal){
+  alert(spectre);
   spectre.body.setVelocityX=0;
   spectre.anims.play('spectre_hit');
 }
