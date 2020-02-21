@@ -1,7 +1,10 @@
 
 function damageCristal(){
   pv_cristal-=5*dps_cristal;
+  if(pv_cristal<0){pv_cristal=0;}
   text_pvcristal.setText(pv_cristal);
+  score += 10;
+  text_score.setText('score: '+score);
 }
 
 function spawn_spectre(){
@@ -49,6 +52,8 @@ function att_spectre(){
         spectres.children.entries[i].anims.stop();
         spectres.children.entries[i].anims.play('spectre_death');
         spectres.remove(spectres.children.entries[i]);
+        score += 10;
+      	text_score.setText('score: '+score);
       }
     }
   }

@@ -28,6 +28,7 @@ var spawn_spot=[[10,302],[10,498],[792, 302],[792, 498]];
 function init(){
  	var platforms;
 	var player;
+	var pylons;
 	var cursors;
 	var stars;
 	var text_score;
@@ -38,6 +39,7 @@ function init(){
 	var timer_dps;
 	var slash_on;
 	var music;
+	var cartes;
 }
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PRELOAD
 function preload(){
@@ -53,6 +55,8 @@ function preload(){
 	this.load.image('surtop','assets/herb_bloc_top.png');
 	this.load.image('surbloc1','assets/herb_bloc_large.png');
 	this.load.image('surbloc2','assets/herb_bloc_small.png');
+	this.load.image('pylon','assets/pylon.png');
+	this.load.image('carte','assets/carte.png');
 	this.load.spritesheet('perso','assets/sofy92.png',{frameWidth: 112, frameHeight: 95});
 	this.load.spritesheet('cristal','assets/cristal.png',{frameWidth: 73, frameHeight: 168});
 	this.load.spritesheet('spectre','assets/spectre164x130.png',{frameWidth: 130, frameHeight: 164});
@@ -67,7 +71,7 @@ function create(){
 ////////////////////////////////////////////////////////////////////////////////  music
 	this.music = this.sound.add('valbit');
 	var musicConfig = {
-		mute: false,
+		mute: true,
 		volume: 0.1,
 		rate: 1,
 		detune: 0,
@@ -77,7 +81,7 @@ function create(){
 	}
 	this.music.play(musicConfig);
 	//////////////////////////////////////////////////////////////////////////////// timers
-	timer_dps = this.time.addEvent({ delay: 918, callback: damageCristal, loop: true });
+	timer_dps = this.time.addEvent({ delay: 925, callback: damageCristal, loop: true });
 	timer = this.time.addEvent({ delay: 1000, callback: spawn_spectre, loop: true });
 //////////////////////////////////////////////////////////////////////////////// décors
 	this.add.image(400,300,'background1');
@@ -86,12 +90,21 @@ function create(){
 //////////////////////////////////////////////////////////////////////////////// plateforme
 	platforms = this.physics.add.staticGroup();
 	platforms.create(400,588,'sol');
+	platforms.create(400,14,'top');
 	platforms.create(60,408,'bloc1');
 	platforms.create(738,408,'bloc1');
 	platforms.create(402,263,'bloc2');
-	this.add.image(400,568,'sursol').setScale(0.5);
+	this.add.image(400,568,'sursol').setScale(0.7);
+	this.add.image(400,42,'surtop').setScale(0.7);
+	this.add.image(402,303,'surbloc2').setScale(0.5);
+//////////////////////////////////////////////////////////////////////////////// pylon
+	pylons = this.physics.add.staticGroup();
+	pylons.create( 81, 336, 'pylon');
+	pylons.create( 81, 530, 'pylon');
+	pylons.create( 711, 336, 'pylon');
+	pylons.create( 711, 530, 'pylon');
 //////////////////////////////////////////////////////////////////////////////// cristal
-	text_pvcristal = this.add.text(362,320, '1000', {fontSize: '32px', fill:'#FFF'});
+	text_pvcristal = this.add.text(362, 325, '1000', {fontSize: '32px', fill:'#FFF'});
 	cristal = this.physics.add.sprite(400,443,'cristal');
 	cristal.body.setGravityY(-300);
 	this.anims.create({
@@ -101,6 +114,9 @@ function create(){
 		repeat: -1
 	});
 	cristal.anims.play('cristal_turn', true);
+//////////////////////////////////////////////////////////////////////////////// cartes
+	cartes = this.physics.add.staticGroup();
+	cartes.create( 400, 180, 'carte');
 //////////////////////////////////////////////////////////////////////////////// player
 	player = this.physics.add.sprite(70,80,'perso').setSize(40,86).setOffset(33,8);
 	//.setScale(1.5);
@@ -148,7 +164,7 @@ function create(){
 	//this.physics.add.collider(stars,platforms);
 	//this.physics.add.overlap(player,stars,collectStar,null,this);
 //////////////////////////////////////////////////////////////////////////////// score
-	text_score = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#FFF'});
+	text_score = this.add.text(16,46, 'score: 0', {fontSize: '32px', fill:'#FFF'});
 //////////////////////////////////////////////////////////////////////////////// bombes
 	//bombs = this.physics.add.group();
 	//this.physics.add.collider(bombs,platforms);
@@ -228,11 +244,23 @@ else{
 	else if(player.body.velocity.y>0 && !player.body.touching.down){
 		player.anims.play('down', true);
 	}
-}
-
-//double jump end
+}//double jump end
 //////////////////////////////////////////////////////////////////////////////// spectre
 spectre_near_cristal(spectres);
+//////////////////////////////////////////////////////////////////////////////// game over
+if (pv_cristal<=0){
+	for (var i = 0; i < spectres.children.entries.length; i++){
+		spectres.children.entries[i].anims.stop();
+		spectres.children.entries[i].anims.play('spectre_death');
+		spectres.remove(spectres.children.entries[i]);
+	}
+	this.physics.pause();
+	player.setTint(0xff0000);
+	gameOver=true;
+	timer_dps.paused = true;
+	timer.paused = true;
+}
+
 }
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UPDATE END
 
