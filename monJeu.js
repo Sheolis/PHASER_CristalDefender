@@ -59,6 +59,9 @@ function preload(){
 	this.load.image('surbloc2','assets/herb_bloc_small.png');
 	this.load.image('pylon','assets/pylon.png');
 	this.load.image('carte','assets/carte.png');
+	this.load.image('carte_1','assets/carte_1.png');
+	this.load.image('carte_2','assets/carte_2.png');
+	this.load.image('carte_3','assets/carte_3.png');
 	this.load.spritesheet('perso','assets/sofy92.png',{frameWidth: 112, frameHeight: 95});
 	this.load.spritesheet('cristal','assets/cristal.png',{frameWidth: 73, frameHeight: 168});
 	this.load.spritesheet('spectre','assets/spectre164x130.png',{frameWidth: 130, frameHeight: 164});
@@ -82,9 +85,14 @@ function create(){
 		delay: 0
 	}
 	this.music.play(musicConfig);
+	this.input.addDownCallback(function() {
+		if (game.sound.context.state === 'suspended') {
+			game.sound.context.resume();
+		}
+	});
 	//////////////////////////////////////////////////////////////////////////////// timers
 	timer_dps = this.time.addEvent({ delay: 925, callback: damageCristal, loop: true });
-	timer = this.time.addEvent({ delay: 2500, callback: spawn_spectre, loop: true });
+	timer = this.time.addEvent({ delay: 1000, callback: spawn_spectre, loop: true });
 	timer_carte = this.time.addEvent({ delay: 5000, callback: spawn_carte, loop: true });
 //////////////////////////////////////////////////////////////////////////////// décors
 	this.add.image(400,300,'background1');
@@ -98,13 +106,13 @@ function create(){
 	platforms.create(738,408,'bloc1');
 	platforms.create(402,263,'bloc2');
 	this.add.image(400,568,'sursol').setScale(0.7);
-	this.add.image(400,42,'surtop').setScale(0.7);
+	this.add.image(300,42,'surtop').setScale(0.7);
 	this.add.image(402,303,'surbloc2').setScale(0.5);
 //////////////////////////////////////////////////////////////////////////////// pylon
 	pylons = this.physics.add.staticGroup();
-	pylons.create( 81, 336, 'pylon');
+	//pylons.create( 81, 336, 'pylon');
 	pylons.create( 81, 530, 'pylon');
-	pylons.create( 711, 336, 'pylon');
+	//pylons.create( 711, 336, 'pylon');
 	pylons.create( 711, 530, 'pylon');
 //////////////////////////////////////////////////////////////////////////////// cristal
 	text_pvcristal = this.add.text(362, 325, '1000', {fontSize: '32px', fill:'#FFF'});
@@ -120,6 +128,9 @@ function create(){
 //////////////////////////////////////////////////////////////////////////////// cartes
 	cartes = this.physics.add.staticGroup();
 	cartes.create( 400, 180, 'carte', false, false);
+	cartes.create( 38, 73,'carte_1', false, false);
+	cartes.create( 82, 73,'carte_2', false, false);
+	cartes.create( 126, 73,'carte_3', false, false);
 //////////////////////////////////////////////////////////////////////////////// player
 	player = this.physics.add.sprite(70,80,'perso').setSize(40,86).setOffset(33,8);
 	//.setScale(1.5);
@@ -167,7 +178,7 @@ function create(){
 	//this.physics.add.collider(stars,platforms);
 	//this.physics.add.overlap(player,stars,collectStar,null,this);
 //////////////////////////////////////////////////////////////////////////////// score
-	text_score = this.add.text(16,46, 'score: 0', {fontSize: '32px', fill:'#FFF'});
+	text_score = this.add.text(590,46, 'score:0', {fontSize: '32px', fill:'#FFF'});
 //////////////////////////////////////////////////////////////////////////////// bombes
 	//bombs = this.physics.add.group();
 	//this.physics.add.collider(bombs,platforms);
@@ -266,33 +277,3 @@ if (pv_cristal<=0){
 
 }
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UPDATE END
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FONCTIONS
-
-/*function hitBomb(player, bomb){
-	this.physics.pause();
-	player.setTint(0xff0000);
-	gameOver=true;
-}*/
-
-
-
-/*function collectStar(player, star){
-	star.disableBody(true,true);
-	score += 10;
-	scoreText.setText('score: '+score);
-	if(stars.countActive(true)===0){
-		stars.children.iterate(function(child){
-			child.enableBody(true,child.x,0, true, true);
-		});
-
-		var x = (player.x < 400) ?
-			Phaser.Math.Between(400,800):
-			Phaser.Math.Between(0,400);
-		var bomb = bombs.create(x, 16, 'bomb');
-		bomb.setBounce(1);
-		bomb.setCollideWorldBounds(true);
-		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-	}
-}
-*/
