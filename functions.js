@@ -4,7 +4,7 @@ function damageCristal(){
   if(pv_cristal<0){pv_cristal=0;}
   text_pvcristal.setText(pv_cristal);
   score += 10;
-  text_score.setText('score: '+score);
+  text_score.setText('score:'+score);
 }
 
 function spawn_spectre(){
@@ -52,12 +52,12 @@ function att_spectre(){
   var range;
   for (var i = 0; i < spectres.children.entries.length; i++) {
     if (Phaser.Math.Difference(spectres.children.entries[i].body.center.y,player.body.center.y)<50){
-      if (Phaser.Math.Difference(spectres.children.entries[i].body.center.x,player.body.center.x)<80){
+      if (Phaser.Math.Difference(spectres.children.entries[i].body.center.x,player.body.center.x)<60){
         spectres.children.entries[i].anims.stop();
         spectres.children.entries[i].anims.play('spectre_death');
         spectres.remove(spectres.children.entries[i]);
         score += 10;
-      	text_score.setText('score: '+score);
+      	text_score.setText('score:'+score);
       }
     }
   }
@@ -67,16 +67,18 @@ function pylons_activation(){
     var kills = 0;
     for (var i = 0; i < pylons.children.entries.length; i++) {
       for (var j = 0; j < spectres.children.entries.length; j++)
-      if (Phaser.Math.Difference(pylons.children.entries[i].body.center.x,spectres.children.entries[j].body.center.x)<100){
-        spectres.children.entries[j].anims.stop();
-        spectres.children.entries[j].anims.play('spectre_death');
-        spectres.remove(spectres.children.entries[j]);
-        score += 10;
-        text_score.setText('score: '+score);
-        kills ++;
-        if (kills ==40) {
-          carte_setDispo(0);
-          return ;
+        if (Phaser.Math.Difference(pylons.children.entries[i].body.center.x,spectres.children.entries[j].body.center.x)<100){
+          if (Phaser.Math.Difference(pylons.children.entries[i].body.center.y,spectres.children.entries[j].body.center.y)<70){
+          spectres.children.entries[j].anims.stop();
+          spectres.children.entries[j].anims.play('spectre_death');
+          spectres.remove(spectres.children.entries[j]);
+          score += 10;
+          text_score.setText('score:'+score);
+          /*kills ++;
+          if (kills ==40) {
+            carte_setDispo(0);
+            return ;
+          }*/ // a mettre si on veut eviter trop de kill par ce sort
         }
       }
     }
