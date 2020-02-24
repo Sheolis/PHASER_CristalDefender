@@ -24,6 +24,7 @@ var released = 0;
 var pv_cristal = 1000;
 var dps_cristal = 0;
 var spawn_spot=[[10,302],[10,498],[792, 302],[792, 498]];
+var carte_dispo= 0;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  INIT
 function init(){
  	var platforms;
@@ -37,6 +38,7 @@ function init(){
 	var spectre;
 	var timer;
 	var timer_dps;
+	var timer_carte;
 	var slash_on;
 	var music;
 	var cartes;
@@ -66,12 +68,12 @@ function preload(){
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CREATE
 function create(){
 	//////////////////////////////////////////////////////////////////////////////// keyboard
-	//this.input.keyboard.on('keydown_SPACE',space_down);
+	this.input.keyboard.on('keydown_ONE',pylons_activation);
 	cursors = this.input.keyboard.createCursorKeys();
 ////////////////////////////////////////////////////////////////////////////////  music
 	this.music = this.sound.add('valbit');
 	var musicConfig = {
-		mute: true,
+		mute: false,
 		volume: 0.1,
 		rate: 1,
 		detune: 0,
@@ -82,7 +84,8 @@ function create(){
 	this.music.play(musicConfig);
 	//////////////////////////////////////////////////////////////////////////////// timers
 	timer_dps = this.time.addEvent({ delay: 925, callback: damageCristal, loop: true });
-	timer = this.time.addEvent({ delay: 1000, callback: spawn_spectre, loop: true });
+	timer = this.time.addEvent({ delay: 2500, callback: spawn_spectre, loop: true });
+	timer_carte = this.time.addEvent({ delay: 5000, callback: spawn_carte, loop: true });
 //////////////////////////////////////////////////////////////////////////////// décors
 	this.add.image(400,300,'background1');
 	this.add.image(400,500,'background2');
@@ -116,7 +119,7 @@ function create(){
 	cristal.anims.play('cristal_turn', true);
 //////////////////////////////////////////////////////////////////////////////// cartes
 	cartes = this.physics.add.staticGroup();
-	cartes.create( 400, 180, 'carte');
+	cartes.create( 400, 180, 'carte', false, false);
 //////////////////////////////////////////////////////////////////////////////// player
 	player = this.physics.add.sprite(70,80,'perso').setSize(40,86).setOffset(33,8);
 	//.setScale(1.5);
