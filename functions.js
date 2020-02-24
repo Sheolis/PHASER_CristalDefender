@@ -51,7 +51,7 @@ function spectre_near_cristal(spectres){
 function att_spectre(){
   var range;
   for (var i = 0; i < spectres.children.entries.length; i++) {
-    if (Phaser.Math.Difference(spectres.children.entries[i].body.center.y,player.body.center.y)<20){
+    if (Phaser.Math.Difference(spectres.children.entries[i].body.center.y,player.body.center.y)<50){
       if (Phaser.Math.Difference(spectres.children.entries[i].body.center.x,player.body.center.x)<80){
         spectres.children.entries[i].anims.stop();
         spectres.children.entries[i].anims.play('spectre_death');

@@ -59,6 +59,9 @@ function preload(){
 	this.load.image('surbloc2','assets/herb_bloc_small.png');
 	this.load.image('pylon','assets/pylon.png');
 	this.load.image('carte','assets/carte.png');
+	this.load.image('carte_1','assets/carte_1.png');
+	this.load.image('carte_2','assets/carte_2.png');
+	this.load.image('carte_3','assets/carte_3.png');
 	this.load.spritesheet('perso','assets/sofy92.png',{frameWidth: 112, frameHeight: 95});
 	this.load.spritesheet('cristal','assets/cristal.png',{frameWidth: 73, frameHeight: 168});
 	this.load.spritesheet('spectre','assets/spectre164x130.png',{frameWidth: 130, frameHeight: 164});
@@ -82,6 +85,11 @@ function create(){
 		delay: 0
 	}
 	this.music.play(musicConfig);
+	this.input.addDownCallback(function() {
+		if (game.sound.context.state === 'suspended') {
+			game.sound.context.resume();
+		}
+	});
 	//////////////////////////////////////////////////////////////////////////////// timers
 	timer_dps = this.time.addEvent({ delay: 925, callback: damageCristal, loop: true });
 	timer = this.time.addEvent({ delay: 2500, callback: spawn_spectre, loop: true });
@@ -120,6 +128,9 @@ function create(){
 //////////////////////////////////////////////////////////////////////////////// cartes
 	cartes = this.physics.add.staticGroup();
 	cartes.create( 400, 180, 'carte', false, false);
+	cartes.create( 38, 73,'carte_1', false, false);
+	cartes.create( 82, 73,'carte_2', false, false);
+	cartes.create( 126, 73,'carte_3', false, false);
 //////////////////////////////////////////////////////////////////////////////// player
 	player = this.physics.add.sprite(70,80,'perso').setSize(40,86).setOffset(33,8);
 	//.setScale(1.5);
