@@ -13,7 +13,7 @@ function spawn_spectre(){
     var spectre = spectres.create( spawn_spot[i_spawn][0], spawn_spot[i_spawn][1], 'spectre').setSize(63,94).setOffset(3,66);
     spectre.setVelocityX(70);
     spectre.anims.play('spectre_walk', true);
-    timer.delay *=0.8;
+    timer.delay *=0.99;
   }else {
     var spectre = spectres.create( spawn_spot[i_spawn][0], spawn_spot[i_spawn][1], 'spectre').setSize(63,94).setOffset(63,66);
     spectre.setFlipX(true);
