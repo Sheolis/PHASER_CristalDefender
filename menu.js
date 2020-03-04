@@ -36,6 +36,7 @@ preload(){
   this.load.spritesheet('perso','assets/sofy92.png',{frameWidth: 112, frameHeight: 95});
   this.load.spritesheet('cristal','assets/cristal.png',{frameWidth: 73, frameHeight: 168});
   this.load.spritesheet('spectre','assets/spectre164x130.png',{frameWidth: 130, frameHeight: 164});
+  this.load.spritesheet('dmgpylon','assets/dmgspylon.png',{frameWidth: 100, frameHeight: 100});
 }//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CREATE
 
 create(){

@@ -65,6 +65,7 @@ function att_spectre(){
 function pylons_activation(){
   if (carte_dispo == 1){
     var kills = 0;
+    gdfsg.children.iterate(function(child){})
     for (var i = 0; i < pylons.children.entries.length; i++) {
       for (var j = 0; j < spectres.children.entries.length; j++)
         if (Phaser.Math.Difference(pylons.children.entries[i].body.center.x,spectres.children.entries[j].body.center.x)<100){

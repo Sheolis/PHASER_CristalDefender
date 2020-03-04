@@ -51,6 +51,11 @@ create(){
   	pylons.create( 81, 530, 'pylon');
   	//pylons.create( 711, 336, 'pylon');
   	pylons.create( 711, 530, 'pylon');
+    dmgpylonanims = this.physics.add.staticGroup();
+    dmgpylonanims.create( 51, 526, 'dmgpylon');
+    dmgpylonanims.create( 111, 526, 'dmgpylon');
+    dmgpylonanims.create( 681, 526, 'dmgpylon');
+    dmgpylonanims.create( 741, 526, 'dmgpylon');
   //////////////////////////////////////////////////////////////////////////////// cristal
   	text_pvcristal = this.add.text(362, 325, '1000', {fontSize: '32px', fill:'#FFF'});
   	cristal = this.physics.add.sprite(400,443,'cristal');
@@ -210,10 +215,6 @@ update(){
   	timer_dps.paused = true;
   	timer.paused = true;
   }
-
-  if (cursors.shift.isDown) {
-    this.scene.start("Menu" , {});
-   }
   }
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UPDATE END
 }

@@ -16,6 +16,7 @@ var cartes;
 var cristal;
 var spectres;
 var i;
+var dmgpylonanims;
 
 var score = 0;
 var dispo_jj = 0;
